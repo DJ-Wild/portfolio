@@ -239,6 +239,38 @@
         max-width: 100%;
       }
     }
+
+    /* ✅ МОБИЛЬНЫЕ УСТРОЙСТВА — РАЗРЕШИТЬ ПРОКРУТКУ */
+  @media (max-width: 768px) {
+    body {
+      overflow-y: auto; /* ⬅️ Разрешить прокрутку */
+    }
+
+    .main-container {
+      padding: 1.5rem 1rem;
+      align-items: center; /* центрировать по горизонтали */
+    }
+
+    .center-content {
+      margin-top: 0;
+    }
+
+    .avatar {
+      width: 280px;
+      height: 280px;
+    }
+
+    .info-box {
+      max-width: 100%;
+      padding: 1.2rem;
+    }
+
+    /* Скрыть боковые панели на мобильных */
+    .sidebar {
+      display: none !important;
+    }
+  }
+
   </style>
 </head>
 <body>
