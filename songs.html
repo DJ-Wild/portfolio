@@ -38,7 +38,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Навбар — как в index.html */
+    /* Навбар */
     nav {
       padding: 1.2rem 0;
       background: rgba(8, 0, 16, 0.6);
@@ -68,19 +68,19 @@
       transform: translateY(-2px) scale(1.02);
     }
 
-    /* Контейнер для огромных карточек */
+    /* Контейнер для песен */
     .songs-container {
       padding: 2rem 1.2rem 3rem;
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* ВСЕГДА 2 колонки */
-      gap: 2.2rem; /* чуть больше, но не много */
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.2rem;
       max-width: none;
       margin: 0 auto;
     }
 
-    /* ОГРОМНЫЕ карточки */
+    /* ОГРОМНЫЕ карточки — десктоп */
     .song-card {
-      height: 640px; /* Очень высокие */
+      height: 640px;
       border-radius: 20px;
       overflow: hidden;
       position: relative;
@@ -91,7 +91,7 @@
       animation: fadeInUp 0.7s forwards;
     }
 
-    /* Анимация появления с задержкой */
+    /* Анимация появления */
     .song-card:nth-child(1) { animation-delay: 0.1s; }
     .song-card:nth-child(2) { animation-delay: 0.2s; }
     .song-card:nth-child(3) { animation-delay: 0.3s; }
@@ -102,7 +102,6 @@
     .song-card:nth-child(8) { animation-delay: 0.8s; }
     .song-card:nth-child(9) { animation-delay: 0.9s; }
     .song-card:nth-child(10) { animation-delay: 1.0s; }
-    /* Можно добавить больше, если нужно */
 
     @keyframes fadeInUp {
       to {
@@ -160,21 +159,50 @@
       font-size: 1.2rem;
     }
 
-    /* Мобильные: 1 колонка, но тоже большие */
+    /* 📱 МОБИЛЬНАЯ ВЕРСИЯ — КВАДРАТНЫЕ КАРТОЧКИ */
     @media (max-width: 900px) {
       .songs-container {
         grid-template-columns: 1fr;
         gap: 2rem;
         padding: 1.5rem;
       }
+
       .song-card {
-        height: 520px;
+        height: auto;
+        padding-bottom: 100%; /* ⬅️ Квадрат */
+        position: relative;
+        border-radius: 16px;
       }
+
+      .song-card img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .song-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);
+        padding: 1.8rem 1.2rem;
+      }
+
       .song-title {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
       }
+
       .song-desc {
-        font-size: 1.1rem;
+        font-size: 1rem;
+      }
+
+      /* Убираем анимацию задержки на мобильных — чтобы не тормозило */
+      .song-card {
+        animation-delay: 0s !important;
       }
     }
   </style>
@@ -233,7 +261,7 @@
     async function loadSongs() {
       const container = document.getElementById('songs-container');
       try {
-        const res = await fetch('songs-page.csv'); // ⬅️ ИЗМЕНЕНО!
+        const res = await fetch('songs-page.csv');
         if (!res.ok) throw new Error('Файл не найден');
         const text = await res.text();
         const songs = parseCSV(text);
@@ -247,7 +275,6 @@
         songs.forEach(song => {
           if (!song.Название || !song.Обложка || !song.Ссылка) return;
 
-          // ⬅️ ПУТЬ К КАРТИНКЕ — image/
           const imagePath = `image/${song.Обложка}`;
 
           const card = document.createElement('a');
