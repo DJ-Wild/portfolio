@@ -29,6 +29,9 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: hidden; /* ⬅️ УБИРАЕМ СКРОЛЛБАР НАВСЕГДА */
+      position: relative;
     }
 
     @keyframes gradientShift {
@@ -75,103 +78,41 @@
       border-color: rgba(130, 90, 220, 0.4);
     }
 
-    /* Основной контент — grid */
-    .main-content {
-      display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
-      gap: 2rem;
-      padding: 2rem;
-      flex: 1;
-      align-items: center;
-    }
-
-    /* Анимированный контейнер панели */
-    .sidebar-wrapper {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: slideInUp 0.6s ease-out forwards;
-      animation-delay: 0.2s; /* левая — чуть раньше */
-    }
-
-    .sidebar-wrapper.right {
-      animation-delay: 0.4s; /* правая — чуть позже */
-    }
-
-    @keyframes slideInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Боковые панели */
-    .sidebar {
-      background: rgba(10, 0, 25, 0.35);
-      border-radius: 16px;
-      padding: 1.2rem;
-      border: 1px solid rgba(80, 40, 120, 0.2);
-      backdrop-filter: blur(5px);
+    /* Основной контент */
+    .main-container {
+      position: relative;
+      min-height: calc(100vh - 70px);
+      padding: 2rem 1rem;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
-      max-width: 300px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      justify-content: center;
+      align-items: flex-start;
+      overflow: hidden;
     }
 
-    .sidebar h2 {
-      font-size: 1.3rem;
-      text-align: center;
-      color: #d0b8ff;
-      margin-bottom: 0.4rem;
-    }
-
-    .item-button {
-      background: rgba(40, 10, 60, 0.4);
-      color: #e0d0ff;
-      border: 1px solid rgba(100, 60, 150, 0.3);
-      border-radius: 10px;
-      padding: 0.55rem 0.8rem;
-      text-align: center;
-      text-decoration: none;
-      transition: all 0.25s ease;
-      cursor: pointer;
-      display: block;
-      white-space: nowrap;
-      max-width: 100%;
-      word-break: break-all;
-      min-width: 120px;
-      font-size: 1.05rem;
-      margin-bottom: 0.6rem; /* ⬅️ Расстояние между кнопками */
-    }
-
-    .item-button:last-child {
-      margin-bottom: 0; /* у последней — убрать отступ */
-    }
-
-    .item-button:hover {
-      background: rgba(70, 30, 110, 0.6);
-      color: white;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(100, 60, 180, 0.4);
-    }
-
-    /* Центр */
+    /* Центральная часть */
     .center-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.2rem;
-      text-align: center;
+      gap: 1.5rem;
+      z-index: 10;
+      margin-top: 1rem;
     }
 
     .avatar {
-      width: 200px;
-      height: 200px;
-      border-radius: 12px;
+      width: 400px;
+      height: 400px;
+      border-radius: 16px;
       object-fit: cover;
-      box-shadow: 0 0 20px rgba(100, 50, 200, 0.5);
-      border: 2px solid rgba(150, 100, 255, 0.3);
+      box-shadow: 0 0 30px rgba(100, 50, 200, 0.6);
+      border: 3px solid rgba(150, 100, 255, 0.4);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
     }
 
     .info-box {
@@ -180,7 +121,9 @@
       padding: 1.5rem;
       border: 1px solid rgba(80, 40, 120, 0.3);
       backdrop-filter: blur(6px);
-      max-width: 100%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .info-box h2 {
@@ -193,32 +136,107 @@
       line-height: 1.5;
     }
 
-    .loading {
+    /* БОКОВЫЕ ПАНЕЛИ */
+
+    .sidebar {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 280px;
+      background: rgba(10, 0, 25, 0.35);
+      border-radius: 16px;
+      padding: 1.8rem;
+      border: 1px solid rgba(80, 40, 120, 0.2);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      z-index: 5;
+      opacity: 0;
+      transition: all 0.6s ease;
+    }
+
+    .sidebar.left {
+      left: 20px;
+      animation: fadeInLeft 0.8s ease-out forwards;
+    }
+
+    .sidebar.right {
+      right: 20px;
+      animation: fadeInRight 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInLeft {
+      from { left: -280px; opacity: 0; }
+      to { left: 20px; opacity: 0.9; }
+    }
+
+    @keyframes fadeInRight {
+      from { right: -280px; opacity: 0; }
+      to { right: 20px; opacity: 0.9; }
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
       text-align: center;
-      color: #a090b0;
-      font-style: italic;
-      padding: 0.6rem;
+      color: #d0b8ff;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .item-button {
+      background: rgba(40, 10, 60, 0.4);
+      color: #e0d0ff;
+      border: 1px solid rgba(100, 60, 150, 0.3);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      display: block;
+      white-space: nowrap;
+      max-width: 100%;
+      word-break: break-all;
+      min-width: 150px;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .item-button:last-child {
+      margin-bottom: 0;
+    }
+
+    .item-button:hover {
+      background: rgba(70, 30, 110, 0.6);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(100, 60, 180, 0.4);
     }
 
     /* Адаптивность */
-    @media (max-width: 768px) {
-      .main-content {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-        gap: 2rem;
-      }
+    @media (max-width: 1024px) {
       .sidebar {
-        max-width: 100%;
+        display: none;
+      }
+      .center-content {
+        width: 100%;
       }
       .avatar {
-        width: 150px;
-        height: 150px;
+        width: 300px;
+        height: 300px;
       }
-      .sidebar-wrapper {
-        animation-delay: 0.1s;
+      .main-container {
+        padding: 1rem;
       }
-      .sidebar-wrapper.right {
-        animation-delay: 0.2s;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 0.5rem;
+      }
+      .info-box {
+        max-width: 100%;
       }
     }
   </style>
@@ -232,30 +250,27 @@
     </div>
   </nav>
 
-  <div class="main-content">
-    <!-- Левая панель — Песни -->
-    <div class="sidebar-wrapper">
-      <div class="sidebar">
-        <h2>🎵 Мои песни</h2>
-        <div id="songs-list" class="loading">Загрузка...</div>
-      </div>
-    </div>
-
-    <!-- Центр — фото + информация -->
+  <div class="main-container">
+    <!-- Центр -->
     <div class="center-content">
       <img src="im.png" alt="Моя фотография" class="avatar">
+
       <div class="info-box">
         <h2>Добро пожаловать</h2>
         <p id="info-text">Загружается...</p>
       </div>
     </div>
 
-    <!-- Правая панель — Проекты -->
-    <div class="sidebar-wrapper right">
-      <div class="sidebar">
-        <h2>🛠️ Мои проекты</h2>
-        <div id="projects-list" class="loading">Загрузка...</div>
-      </div>
+    <!-- Левая панель -->
+    <div class="sidebar left">
+      <h2>🎵 Мои песни</h2>
+      <div id="songs-list" class="loading">Загрузка...</div>
+    </div>
+
+    <!-- Правая панель -->
+    <div class="sidebar right">
+      <h2>🛠️ Мои проекты</h2>
+      <div id="projects-list" class="loading">Загрузка...</div>
     </div>
   </div>
 
