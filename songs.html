@@ -160,7 +160,7 @@
       font-size: 1.2rem;
     }
 
-    /* ✅ ИСПРАВЛЕННЫЙ МОБИЛЬНЫЙ БЛОК */
+    /* ✅ ПРОСТОЙ МОБИЛЬНЫЙ РЕЖИМ — НИЧЕГО НЕ ЛОМАЕТСЯ */
     @media (max-width: 900px) {
       .songs-container {
         grid-template-columns: 1fr;
@@ -169,37 +169,8 @@
       }
 
       .song-card {
-        height: auto;
-        width: 100%;
-        aspect-ratio: 1 / 1; /* КВАДРАТ! */
+        height: 480px; /* Высота меньше, но фиксированная */
         border-radius: 16px;
-        position: relative;
-        padding: 0;
-        /* Сброс десктопных стилей */
-        transform: none !important;
-        opacity: 1 !important;
-        animation: none !important;
-      }
-
-      .song-card img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 16px;
-      }
-
-      .song-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);
-        padding: 1.8rem 1.2rem;
-        color: white;
-        border-radius: 0 0 16px 16px;
       }
 
       .song-title {
@@ -207,7 +178,18 @@
       }
 
       .song-desc {
-        font-size: 1rem;
+        font-size: 1.1rem;
+      }
+
+      .song-overlay {
+        padding: 1.8rem 1.2rem;
+      }
+
+      /* Отключаем анимацию на мобильных — быстрее */
+      .song-card {
+        opacity: 1;
+        transform: none;
+        animation: none;
       }
     }
   </style>
